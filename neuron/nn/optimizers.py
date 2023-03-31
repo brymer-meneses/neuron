@@ -8,7 +8,7 @@ class Optimizer:
     def step(self, layer: Layer) -> None:
         raise NotImplementedError
 
-class SGG(Optimizer):
+class SGD(Optimizer):
 
     def __init__(self, lr: float) -> None:
         self.lr = lr
