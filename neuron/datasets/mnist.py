@@ -9,7 +9,7 @@ import os
 class MNIST:
 
     def __init__(self, path: str) -> None:
-        self.path = path
+        self.path = path + ".npz"
         self.url = r"https://storage.googleapis.com/tensorflow/tf-keras-datasets/mnist.npz"
 
         self.__is_downloaded = False
