@@ -26,7 +26,7 @@ class Tensor:
         return
 
     def backward(self, grad: Optional[Numeric] = None) -> None:
-        assert self.requires_grad, "Cannot call `backwards` to a tensor that has `requires_grad=True`"
+        assert self.requires_grad, "Cannot call `backwards` to a tensor that has `requires_grad=False.`"
 
         if grad is None:
             if self.shape == ():
@@ -67,6 +67,14 @@ class Tensor:
     def __add__(self, other: Numeric) -> 'Tensor':
         from neuron import backend
         return backend.add(self, _ensure_tensor(other))
+    
+    def __neg__(self) -> 'Tensor':
+        from neuron import backend
+        return backend.neg(self)
+
+    def __sub__(self, other: Numeric) -> 'Tensor':
+        from neuron import backend
+        return backend.sub(self, _ensure_tensor(other))
 
     def __radd__(self, other: Numeric) -> 'Tensor':
         from neuron import backend
