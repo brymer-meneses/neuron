@@ -1,4 +1,5 @@
 from abc import abstractmethod
+from typing import List
 
 from neuron.nn.layers import Layer
 from neuron.nn.optimizers import Optimizer
@@ -8,11 +9,11 @@ from neuron.tensor import Tensor
 
 class Model:
 
-    def __init__(self) -> None:
-        self.__is_compiled = False
-        self.__layers = []
+    __is_compiled = False
+    __layers: List[Layer] = []
 
     def __call__(self, inputs: Tensor) -> Tensor:
+        assert self.__is_compiled, "Cannot propagate data to a model that is not compiled."
         return self.forward(inputs)
 
     @abstractmethod
