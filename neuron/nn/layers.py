@@ -1,8 +1,12 @@
 from abc import abstractmethod
+from typing import Optional
 
 from neuron import Tensor
 
 class Layer:
+
+    weights: Tensor
+    bias: Optional[Tensor]
 
     @abstractmethod
     def __init__(self, in_features: int, out_features: int, use_bias: bool, name: str) -> None:
