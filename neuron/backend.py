@@ -1,10 +1,9 @@
 
-from typing import Union, Callable
+from typing import Callable
 from neuron.tensor import Tensor, Dependency
 
 import numpy as np
 
-Numeric = Union[float, list[float], list[int], np.ndarray]
 GradFn = Callable[[np.ndarray], np.ndarray]
 
 def add(t1: Tensor, t2: Tensor) -> Tensor:
