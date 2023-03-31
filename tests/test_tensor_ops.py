@@ -154,9 +154,6 @@ class TensorOpsTest(TestCase):
         assert t1.grad is not None
         assert t2.grad is not None
 
-        print(t0.data)
-        print(t1.data)
-
         np.testing.assert_array_equal(t0.grad, initial_grad * t1.data)
         np.testing.assert_array_equal(t1.grad, initial_grad * t0.data)
 
