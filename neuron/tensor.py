@@ -104,7 +104,7 @@ def _ensure_array(data: Numeric) -> np.ndarray:
         return np.array(data, dtype=np.float64)
     return np.array(data, dtype=np.float64)
 
-def _ensure_tensor(data: Numeric | Tensor) -> Tensor:
+def _ensure_tensor(data: Numeric) -> Tensor:
     if isinstance(data, Tensor):
         return data
     else:
