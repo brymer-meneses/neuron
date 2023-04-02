@@ -10,12 +10,24 @@ def ReLU(t0: Tensor) -> Tensor:
     t1 = Tensor(data, t0.requires_grad)
 
     if t0.requires_grad:
-        gradfn: GradFn = lambda grad : grad * np.where(t0.data > 0, 1, 0)
+        gradfn: GradFn = lambda grad : grad * np.where(t0.data>0, 1, 0)
         t1.depends_on.append(Dependency(t0, gradfn, "reluBackward"))
 
     return t1
 
-def sigmoid(t0: Tensor) -> Tensor:
+def TanH(t0: Tensor) -> Tensor:
+    data = np.tanh(t0.data)
+
+    t1 = Tensor(data, t0.requires_grad)
+
+    if t0.requires_grad:
+        gradfn: GradFn = lambda grad : grad * (1 - np.power(data, 2))
+        t1.depends_on.append(Dependency(t0, gradfn, "tanHBackward"))
+
+    return t1
+
+def Sigmoid(t0: Tensor) -> Tensor:
+
 
     _sigmoid = lambda x : 1 / (1 + np.exp(-x))
     
