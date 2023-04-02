@@ -15,15 +15,6 @@ class SGD(Optimizer):
 
     def step(self, layer: Layer) -> None:
 
-        assert layer.weights.grad is not None, "Cannot optimize layer with no gradients"
-        
-        layer.weights.data = layer.weights.data - self.lr * layer.weights.grad
-
-        if layer.bias:
-            assert layer.bias.grad is not None, "Cannot optimize layer with no gradients"
-
-            layer.bias.data = layer.bias.data - self.lr * layer.bias.grad
-
-
-
-
+        for weight in layer.weights.values():
+            assert weight.grad is not None, "Cannot optimize layer with no gradients"
+            weight.data = weight.data - self.lr * weight.grad

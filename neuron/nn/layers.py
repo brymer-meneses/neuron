@@ -1,12 +1,12 @@
-from abc import abstractmethod
-from typing import Optional
+from abc import abstractmethod, ABC
+
+from typing import Dict
 
 from neuron import Tensor
 
-class Layer:
+class Layer(ABC):
 
-    weights: Tensor
-    bias: Optional[Tensor]
+    weights: Dict[str, Tensor]
 
     @abstractmethod
     def __init__(self, in_features: int, out_features: int, use_bias: bool, name: str) -> None:
@@ -20,42 +20,46 @@ class Layer:
     def __repr__(self) -> str:
         raise NotImplementedError
 
+    def __call__(self, inputs: Tensor) -> Tensor:
+        return self.forward(inputs)
+
     @abstractmethod
     def zero_grad(self) -> None:
         raise NotImplementedError
 
 
 class Linear(Layer):
-    def __init__(self, in_features: int, out_features: int, use_bias: bool, name: str = 'Linear') -> None:
+    def __init__(self, in_features: int, out_features: int, use_bias: bool=False, name: str = 'Linear') -> None:
         self.in_features = in_features
         self.out_features = out_features
         self.use_bias = use_bias
         self.name = name
 
-        self.weights = Tensor.random((out_features, in_features), requires_grad=True)
+        self.weights: Dict[str, Tensor] = {}
+
+        self.weights["W"] = Tensor.random((out_features, in_features), requires_grad=True)
         
         if self.use_bias:
-            self.bias = Tensor.random((out_features, 1), requires_grad=True)
-        else:
-            self.bias = None
+            self.weights["b"] = Tensor.random((out_features, 1), requires_grad=True)
 
     def __repr__(self) -> str:
         return f"<Linear in_features={self.in_features} out_features={self.out_features} use_bias={self.use_bias}>"
 
     def forward(self, data: Tensor) -> Tensor:
-        assert self.weights.shape[1] == data.shape[0], f"Cannot forward data with shape {data.shape} to Linear Layer with shape {self.weights.shape}."
+        assert self.weights["W"].shape[1] == data.shape[0], f"Cannot forward data with shape {data.shape} to Linear Layer with shape {self.weights['W'].shape}."
 
-        if self.bias:
-            self.output = self.weights @ data + self.bias
+        if self.use_bias:
+            output = self.weights["W"] @ data + self.weights["b"]
         else:
-            self.output = self.weights @ data
+            output = self.weights["W"] @ data
 
-        return self.output
+        return output
 
     def zero_grad(self) -> None:
-        self.weights.zero_grad()
-        if self.bias:
-            self.bias.zero_grad()
+
+        for weight in self.weights.values():
+            weight.zero_grad()
+
         return
 
 
