@@ -1,16 +1,14 @@
-from abc import abstractmethod
+from abc import abstractmethod, ABC
 from typing import List
 
 from neuron.nn.layers import Layer
 from neuron.nn.optimizers import Optimizer
-from neuron.nn.loss import Loss
 from neuron.tensor import Tensor
 
-
-class Model:
+class Model(ABC):
 
     __is_compiled = False
-    __layers: List[Layer] = []
+    __layers: Dict[str, Layer] = {}
 
     def __call__(self, inputs: Tensor) -> Tensor:
         assert self.__is_compiled, "Cannot propagate data to a model that is not compiled."
@@ -23,20 +21,29 @@ class Model:
     def optimize(self) -> None:
         assert self.__is_compiled, "Cannot optimize a model that is not compiled."
 
-        for layer in self.__layers:
+        for layer in self.__layers.values():
             self.optimizer.step(layer)
 
-    def compile(self, optimizer: Optimizer, loss: Loss) -> None:
+    def compile(self, optimizer: Optimizer) -> None:
         self.__is_compiled = True
 
         self.optimizer = optimizer
-        self.loss = loss
+
+        attributes = vars(self)
         
-        for _, value in vars(self):
+        for key, value in attributes.items():
             if isinstance(value, Layer):
-                self.__layers.append(value)
+                self.__layers[key] = value
+
+    def summary(self) -> None:
+        # TODO: improve this
+        for name, layer in self.__layers.items():
+            print(f"{name} - {layer}")
+
+        print(f"Optimizer: {self.optimizer}")
+        return
 
     def zero_grad(self) -> None:
-        for layer in self.__layers:
+        for layer in self.__layers.values():
             layer.zero_grad()
 
