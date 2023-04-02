@@ -58,7 +58,7 @@ class Tensor:
 
     @staticmethod
     def random(shape: Tuple[int, ...], requires_grad: bool = False) -> 'Tensor':
-        return Tensor(np.random.rand(*shape), requires_grad=requires_grad)
+        return Tensor(np.random.randn(*shape), requires_grad=requires_grad)
 
     def zero_grad(self) -> None:
         assert self.requires_grad, "Cannot zero the gradients of a tensor that has requires_grad = False."
