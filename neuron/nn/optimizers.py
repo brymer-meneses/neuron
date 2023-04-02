@@ -15,6 +15,7 @@ class SGD(Optimizer):
 
     def step(self, layer: Layer) -> None:
 
-        for weight in layer.weights.values():
-            assert weight.grad is not None, "Cannot optimize layer with no gradients"
-            weight.data = weight.data - self.lr * weight.grad
+        for param in layer.params.values():
+            assert param.grad is not None, "Cannot optimize layer with no gradients"
+
+            param.data = param.data - self.lr * param.grad

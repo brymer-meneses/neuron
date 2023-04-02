@@ -6,7 +6,7 @@ from neuron import Tensor
 
 class Layer(ABC):
 
-    weights: Dict[str, Tensor]
+    params: Dict[str, Tensor]
 
     @abstractmethod
     def __init__(self, in_features: int, out_features: int, use_bias: bool, name: str) -> None:
@@ -35,29 +35,29 @@ class Linear(Layer):
         self.use_bias = use_bias
         self.name = name
 
-        self.weights: Dict[str, Tensor] = {}
+        self.params: Dict[str, Tensor] = {}
 
-        self.weights["W"] = Tensor.random((out_features, in_features), requires_grad=True)
+        self.params["W"] = Tensor.random((out_features, in_features), requires_grad=True)
         
         if self.use_bias:
-            self.weights["b"] = Tensor.random((out_features, 1), requires_grad=True)
+            self.params["b"] = Tensor.random((out_features, 1), requires_grad=True)
 
     def __repr__(self) -> str:
         return f"<Linear in_features={self.in_features} out_features={self.out_features} use_bias={self.use_bias}>"
 
     def forward(self, data: Tensor) -> Tensor:
-        assert self.weights["W"].shape[1] == data.shape[0], f"Cannot forward data with shape {data.shape} to Linear Layer with shape {self.weights['W'].shape}."
+        assert self.params["W"].shape[1] == data.shape[0], f"Cannot forward data with shape {data.shape} to Linear Layer with shape {self.params['W'].shape}."
 
         if self.use_bias:
-            output = self.weights["W"] @ data + self.weights["b"]
+            output = self.params["W"] @ data + self.params["b"]
         else:
-            output = self.weights["W"] @ data
+            output = self.params["W"] @ data
 
         return output
 
     def zero_grad(self) -> None:
 
-        for weight in self.weights.values():
+        for weight in self.params.values():
             weight.zero_grad()
 
         return
