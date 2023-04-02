@@ -9,6 +9,10 @@ class Dependency(NamedTuple):
     gradfn: Callable[[np.ndarray], np.ndarray]
     gradfn_name: str
 
+    def __repr__(self) -> str:
+        return f"<Dependency tensor_shape: {self.tensor.shape} gradfn: {self.gradfn_name}>"
+
+
 class Tensor:
 
     def __init__(self, data: Numeric, requires_grad: bool = False) -> None:
