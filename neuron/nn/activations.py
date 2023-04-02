@@ -35,7 +35,9 @@ def Sigmoid(t0: Tensor) -> Tensor:
     t1 = Tensor(data, t0.requires_grad)
         
     if t0.requires_grad:
-        gradfn: GradFn = lambda grad : grad * _sigmoid(t0.data) * _sigmoid(1 - t0.data)
+        def gradfn(grad: np.ndarray) -> np.ndarray:
+            return grad * _sigmoid(t0.data) * _sigmoid(1 - t0.data)
+
         t1.depends_on.append(Dependency(t0, gradfn, "sigmoidBackward"))
     return t1
 
