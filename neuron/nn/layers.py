@@ -29,7 +29,7 @@ class Layer(ABC):
 
 
 class Linear(Layer):
-    def __init__(self, in_features: int, out_features: int, use_bias: bool=False, name: str = 'Linear') -> None:
+    def __init__(self, in_features: int, out_features: int, use_bias: bool=True, name: str = 'Linear') -> None:
         self.in_features = in_features
         self.out_features = out_features
         self.use_bias = use_bias
