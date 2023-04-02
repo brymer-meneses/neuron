@@ -6,16 +6,22 @@ import numpy as np
 
 Loss = Callable[[Tensor, Tensor], Tensor]
 
-def MeanSquaredError(predicted: Tensor, target: Tensor) -> Tensor:
+def MeanSquaredError(t0: Tensor, t1: Tensor) -> Tensor:
 
-    assert predicted.shape == target.shape, "predicted and target tensors must have the same shape"
+    assert t1.shape == t0.shape, "predicted and target tensors must have the same shape"
 
-    data = np.power(predicted.data - target.data, 2).mean()
-    result = Tensor(data, predicted.requires_grad)
+    data = np.square(t0.data - t1.data).mean()
 
-    if predicted.requires_grad:
-        gradfn: GradFn = lambda grad : grad * 2 * (1 / np.size(predicted.data))
-        result.depends_on.append(Dependency(predicted, gradfn, "meanSquaredErrorBackward"))
+    result = Tensor(data, t0.requires_grad or t1.requires_grad)
+    num_elems = np.size(t0.data)
+
+    if t0.requires_grad:
+        gradfn: GradFn = lambda grad : grad * 2 * (1 / num_elems) * (t0.data - t1.data)
+        result.depends_on.append(Dependency(t0, gradfn, "meanSquaredErrorBackward0"))
+
+    if t1.requires_grad:
+        gradfn: GradFn = lambda grad : grad * 2 * (1 / num_elems) * (t0.data - t1.data) * -1
+        result.depends_on.append(Dependency(t1, gradfn, "meanSquaredErrorBackward1"))
 
     return result
 
