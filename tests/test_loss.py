@@ -1,11 +1,9 @@
 from unittest import TestCase
 
 from neuron import Tensor
-from neuron.nn.activations import ReLU, Sigmoid, TanH
 from neuron.nn.loss import MeanSquaredError
 
 import numpy as np
-
 
 class TestLoss(TestCase):
     def test_mean_squared_error(self):
