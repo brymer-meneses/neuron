@@ -51,6 +51,11 @@ class Tensor:
         data = self.data.reshape(shape)
         return Tensor(data, requires_grad=self.requires_grad)
 
+
+    def __str__(self) -> str:
+        return self.data.__str__()
+        
+
     @staticmethod
     def random(shape: Tuple[int, ...], requires_grad: bool = False) -> 'Tensor':
         return Tensor(np.random.rand(*shape), requires_grad=requires_grad)
