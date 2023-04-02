@@ -30,14 +30,14 @@ class Tensor:
 
         if grad is None:
             if self.shape == ():
-                grad = np.array(1)
+                grad = np.array(1, dtype=np.float64)
             else:
-                raise RuntimeError("Gradient for non-scalar tensor must be specified.")
+                raise RuntimeError(f"Gradient for non-scalar tensor must be specified. Got shape: {self.shape}")
 
         grad = _ensure_array(grad)
 
         assert self.grad is not None
-        assert self.grad.shape == grad.shape
+        assert self.grad.shape == grad.shape, f"Unexpected grad shape, expected: {self.grad.shape}, got: {grad.shape}"
 
         self.grad += grad
 
