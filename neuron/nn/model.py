@@ -1,5 +1,5 @@
 from abc import abstractmethod, ABC
-from typing import List
+from typing import Dict
 
 from neuron.nn.layers import Layer
 from neuron.nn.optimizers import Optimizer
