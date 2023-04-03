@@ -1,12 +1,13 @@
 from abc import abstractmethod, ABC
 
-from typing import Dict
+from typing import Dict, Optional
 
 from neuron import Tensor
 
 class Layer(ABC):
 
     params: Dict[str, Tensor]
+    name: Optional[str] = None
 
     @abstractmethod
     def __init__(self, in_features: int, out_features: int, use_bias: bool, name: str) -> None:
@@ -29,7 +30,7 @@ class Layer(ABC):
 
 
 class Linear(Layer):
-    def __init__(self, in_features: int, out_features: int, use_bias: bool=True, name: str = 'Linear') -> None:
+    def __init__(self, in_features: int, out_features: int, use_bias: bool=True) -> None:
         self.in_features = in_features
         self.out_features = out_features
         self.use_bias = use_bias
