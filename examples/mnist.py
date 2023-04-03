@@ -35,7 +35,7 @@ class LinearModel(Model):
 
 model = LinearModel()
 
-optimizer = SGD(lr=0.1)
+optimizer = SGDM(lr=0.01)
 model.compile(optimizer)
 
 model.summary()
