@@ -34,6 +34,7 @@ class Model(ABC):
         for key, value in attributes.items():
             if isinstance(value, Layer):
                 self.__layers[key] = value
+                value.name = key
 
     def summary(self) -> None:
         # TODO: improve this

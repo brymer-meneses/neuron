@@ -33,7 +33,6 @@ class Linear(Layer):
         self.in_features = in_features
         self.out_features = out_features
         self.use_bias = use_bias
-        self.name = name
 
         self.params: Dict[str, Tensor] = {}
 
