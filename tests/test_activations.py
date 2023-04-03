@@ -7,11 +7,9 @@ import numpy as np
 
 class TestActivations(TestCase):
     
-
     def test_relu(self):
         t0 = Tensor.random((3,3), requires_grad=True)
         t1 = ReLU(t0)
-
 
         t1.backward(np.ones((3,3)))
 
@@ -20,7 +18,7 @@ class TestActivations(TestCase):
         assert t0.grad is not None
         assert t1.grad is not None
 
-        np.testing.assert_equal(t1.grad, np.where(t0.data > 0, 1, 0))
+        np.testing.assert_equal(t0.grad, np.where(t0.data > 0, 1, 0))
 
     def test_tanh(self):
         t0 = Tensor.random((3,3), requires_grad=True)
