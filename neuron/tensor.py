@@ -24,9 +24,6 @@ class Tensor:
         self.depends_on: List[Dependency] = []
         self.grad: Optional[np.ndarray] = None
 
-        if self.requires_grad:
-            self.zero_grad()
-
         return
 
     def backward(self, grad: Optional[Numeric] = None) -> None:
@@ -37,6 +34,9 @@ class Tensor:
                 grad = np.array(1, dtype=np.float64)
             else:
                 raise RuntimeError(f"Gradient for non-scalar tensor must be specified. Got shape: {self.shape}")
+
+        if self.grad is None:
+            self.zero_grad()
 
         grad = _ensure_array(grad)
 
